@@ -40,6 +40,23 @@ const storage = multer.diskStorage({
   app.get('/hello', (req, res) => {
     res.send('Hello from the backend!');
   });
+
+  app.get('/zimages', (req, res) => {
+    res.send('Hello from the images!');
+  });
+
+
+  // Endpoint to get all uploaded images
+    app.get('/images', (req, res) => {
+        fs.readdir(uploadsDir, (err, files) => {
+        if (err) {
+            return res.status(500).json({ error: 'Unable to scan directory' });
+        }
+        const fileUrls = files.map(file => `http://localhost:${port}/uploads/${file}`);
+        res.json(fileUrls);
+        });
+    });
+
   
   app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
